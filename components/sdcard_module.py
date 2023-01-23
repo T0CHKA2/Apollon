@@ -1,6 +1,6 @@
-import machine, os
+import machine, os, sdcard
 
-machine.SDCard(
+class machine.SDCard(
     slot=1,
     width=1,
     cd=34,
@@ -15,6 +15,6 @@ machine.SDCard(
 sd = sdcard.SDCard(machine.SPI(1), machine.Pin(34)) 
 vfs = os.VfsFat(sd)
 
-os.mount(vfs, "/fc")
-print("Filesystem check")
-print(os.listdir("/fc"))
+os.mount(vfs, “/fc”)
+print(“Filesystem check”)
+print(os.listdir(“/fc”))

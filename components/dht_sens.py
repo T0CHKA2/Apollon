@@ -1,5 +1,5 @@
 from machine import Pin
-import dht, neopixelring, uasyncio
+import dht, neopixelring, uasyncio, event_handler
 
 # Settings
 sensor = dht.DHT22(Pin(15))
@@ -11,9 +11,9 @@ async def measure(delay):
         temp = sensor.temperature()
         hum = sensor.humidity()
         if temp > 20:
-            neopixelring.setred(13)
+            neopixelring.setred(27)
         elif temp < 0:
-            neopixelring.setblue(13)
+            neopixelring.setblue(27)
         else:
-            neopixelring.setorange(13)
+            neopixelring.setorange(27)
         await uasyncio.sleep(delay)

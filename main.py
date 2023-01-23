@@ -1,24 +1,25 @@
-import esp32, machine
-from machine import Pin
+import machine, buttons, dht_sens, event_handler
 import uasyncio as asyncio
-from dht_sens import measure
+from uasyncio import Event
 import neopixelring
 
-# Settings
-wake1 = Pin(13, Pin.IN)
+# If woke up from deep sleep turn back on
+if machine.reset_cause() is machine.DEEPSLEEP_RESET:
+    event_handler.PowerOn.set()
+    main()
 
-# Turning on indicator
-neopixelring.fade(13)
+event_handler.PowerOn.set()
 
-# Coroutine: Entry point
+# Coroutine: entry point
 async def main():
-    asyncio.create_task(measure(5))
+    # Async goes down here
+    asyncio.create_task(dht_sens.measure(1))
+    asyncio.create_task(buttons.longpress(32))
+    asyncio.create_task(neopixelring.LED_st(27))
 
-    # Async goes here
     while True:
-        # External button wake from deep sleep
-        # esp32.wake_on_ext0(pin = wake1, level = esp32.WAKEUP_ANY_HIGH)
-        await asyncio.sleep_ms(1000)
+        await asyncio.sleep_ms(50)
 
-# Start
+# Start async and ESP32 scripts
+# do NOT delete "asyncio.run()"
 asyncio.run(main())
