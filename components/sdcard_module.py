@@ -1,5 +1,7 @@
 import machine, os, sdcard
 
+# Still in work
+
 class machine.SDCard(
     slot=1,
     width=1,

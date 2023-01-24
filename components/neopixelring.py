@@ -2,16 +2,15 @@ import machine, neopixel, uasyncio, time
 import event_handler as event
 from time import sleep
 
+# Settings
 orange = (255, 184, 65)
 red = (255, 0, 0)
 blue = (0, 0, 255)
 yellow = (255, 255, 0)
 black = (0, 0, 0)
-
-#while True:
-#    await uasyncio.Error()
-#    setorange
                 
+# All functions will be written in LED_st
+
 def cycle(neopixel_pin):
     n = 16
     p = machine.Pin(neopixel_pin)
@@ -76,24 +75,30 @@ def setyellow(neopixel_pin):
         n[i] = yellow
     n.write()
 
-async def LED_st(neopixel_pin):
+# Coroutine: On LED Event change LED color
+async def LED_st(pin):
     while True:
-        stat_nm = await event.WaitAny()
-        if (stat_nm=="Idle"):
+        stat_nm = await event.WaitAny() # check if true
+        if (stat_nm is "Idle"): # If Idle LED go orange
             await event.Idle.wait()
-            await setorange(neopixel_pin)
+            await setorange(pin)
             event.Idle.clear()
-            event.Status.clear()
-        elif (stat_nm=="Think"):
-            await even.Think.wait()
-            cycle(neopixel_pin)
+            event.Status.clear() # Set event close because completed
+        elif (stat_nm is "Think"): # If Think LED go blue cycle
+            await event.Think.wait()
+            cycle(pin)
             event.Think.clear()
-            event.Status.clear()
-        elif (stat_nm=="PowerOn"):
+            event.Status.clear() # Set event close because completed
+        elif (stat_nm is "PowerOn"): # If power on LED go fade from off to orange
             await event.PowerOn.wait()
-            fade(neopixel_pin)
+            fade(pin)
             event.PowerOn.clear()
-            event.Status.clear()
+            event.Status.clear() # Set event close because completed
+        elif (stat_nm is "Error"): # If Error LED go red
+            await event.Error.wait()
+            setred()
+            event.Error.clear()
+            event.Status.clear() # Set event close beacuse completed
         else:
             pass
-        await uasyncio.sleep_ms(200)
+        await uasyncio.sleep_ms(200) # Check every 0.2 sec
