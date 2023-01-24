@@ -1,5 +1,6 @@
 from machine import Pin
-import dht, neopixelring, uasyncio
+import dht, uasyncio
+import event_handler as event
 
 # Coroutine: measure hum & temp every "delay" seconds
 async def measure(pin, delay):
@@ -8,10 +9,8 @@ async def measure(pin, delay):
         sensor.measure() # Measure because in without it hum and temp = 0
         temp = sensor.temperature()
         hum = sensor.humidity()
-        if temp > 20: # If temp too hot, will warn to drink more water
-            neopixelring.setred(27)
-        elif temp < 0:
-            neopixelring.setblue(27) # If too cold, will warn to suit up warm
+        if temp > 20 or temp < 0: # If temp too hot, will warn to drink more water
+            event.FirstDanger.set() # If too cold, will warn to suit up warm
         else: # In normal temperature will continiue work stabile
-            neopixelring.setorange(27)
+            event.Idle.set()
         await uasyncio.sleep(delay)

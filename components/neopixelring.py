@@ -1,4 +1,5 @@
-import machine, neopixel, uasyncio, time
+import neopixel, uasyncio, time
+from machine import Pin
 import event_handler as event
 from time import sleep
 
@@ -8,22 +9,11 @@ red = (255, 0, 0)
 blue = (0, 0, 255)
 yellow = (255, 255, 0)
 black = (0, 0, 0)
-                
-# All functions will be written in LED_st
-
-def cycle(neopixel_pin):
-    n = 16
-    p = machine.Pin(neopixel_pin)
-    np = neopixel.NeoPixel(p, n)
-    for i in range(4 * n):
-        for j in range(n):
-            np[j] = (0, 0, 0)
-            np[i % n] = (blue)
-            np.write()
-            time.sleep_ms(50)
+half_orng = ()
+oneNhalfOrng = ()
 
 def fadeoff(neopixel_pin):
-    p = machine.Pin(neopixel_pin)
+    p = Pin(neopixel_pin)
     n = neopixel.NeoPixel(p, 16)
 
     for i in range (16):        
@@ -32,73 +22,79 @@ def fadeoff(neopixel_pin):
         n.write()
         sleep(0.1)
 
-def fade(neopixel_pin):
-    p = machine.Pin(neopixel_pin)
-    n = neopixel.NeoPixel(p, 16)
-
-    for i in range(16):
-        c = (i * 15, i * 11, i * 4)
-        n.fill(c)
-        n.write()
-        sleep(0.1)
-    
-    setorange(neopixel_pin)
-
-def setorange(neopixel_pin):
-    p = machine.Pin(neopixel_pin)
-    n = neopixel.NeoPixel(p, 16)
-
-    n.fill(orange)
-    n.write()
-
-def setred(neopixel_pin):
-    p = machine.Pin(neopixel_pin)
-    n = neopixel.NeoPixel(p, 16)
-
-    for i in range(16):
-        n[i] = red
-    n.write()
-
-def setblue(neopixel_pin):
-    p = machine.Pin(neopixel_pin)
-    n = neopixel.NeoPixel(p, 16)
-
-    for i in range(16):
-        n[i] = blue
-    n.write()
-
-def setyellow(neopixel_pin):
-    p = machine.Pin(neopixel_pin)
-    n = neopixel.NeoPixel(p, 16)
-
-    for i in range(16):
-        n[i] = yellow
-    n.write()
 
 # Coroutine: On LED Event change LED color
 async def LED_st(pin):
     while True:
+        neo = neopixel.NeoPixel(Pin(pin), 16)
         stat_nm = await event.WaitAny() # check if true
         if (stat_nm is "Idle"): # If Idle LED go orange
             await event.Idle.wait()
-            await setorange(pin)
-            event.Idle.clear()
-            event.Status.clear() # Set event close because completed
+            neo.fill(orange)
+            neo.write()
+            event.CompleteEvent(event.Idle) # Set event close because completed
         elif (stat_nm is "Think"): # If Think LED go blue cycle
             await event.Think.wait()
-            cycle(pin)
-            event.Think.clear()
-            event.Status.clear() # Set event close because completed
+
+            for j in range(16):
+                np[j] = (0, 0, 0)
+                np[i % 16] = (blue)
+                np.write()
+                time.sleep_ms(50)
+            
+            event.CompleteEvent(event.Think) # Set event close because completed
         elif (stat_nm is "PowerOn"): # If power on LED go fade from off to orange
             await event.PowerOn.wait()
-            fade(pin)
-            event.PowerOn.clear()
-            event.Status.clear() # Set event close because completed
+
+            for i in range(16):
+                c = (i * 15, i * 11, i * 4)
+                neo.fill(c)
+                neo.write()
+                sleep(0.1)
+            
+            event.CompleteEvent(event.PowerOn) # Set event close because completed
         elif (stat_nm is "Error"): # If Error LED go red
             await event.Error.wait()
-            setred()
-            event.Error.clear()
-            event.Status.clear() # Set event close beacuse completed
+            neo.fill(red)
+            neo.write()
+            event.CompleteEvent(event.Error) # Set event close beacuse completed
+        elif (stat_nm is "Request"): # If help request LED go blue
+            await event.Request.wait()
+            neo.fill(blue)
+            neo.write
+            event.CompleteEvent(event.Request)
+        elif (stat_nm is "Alarm"): # If Alarm Clock working LED go strobo
+            await event.Alarm.wait()
+            
+            for i in range(10):
+                neo.fill(black)
+                neo.write()
+                sleep(0.5)
+                neo.fill(orange)
+                neo.write()
+                sleep(0.5)
+            
+            event.CompleteEvent(event.Alarm)
+        elif (stat_nm is "FirstDanger"): # If First Danger class go yellow
+            await event.FirstDanger.wait()
+            neo.fill(yellow)
+            neo.write()
+            event.CompleteEvent(event.FirstDanger)
+        elif (stat_nm is "SecondDanger"): # If Second Danger class go half orange
+            await event.FirstDanger.wait()
+            neo.fill(half_orng)
+            neo.write()
+            event.CompleteEvent(event.FirstDanger)
+        elif (stat_nm is "ThirdDanger"): # If Third Danger class go one and half orange
+            await event.FirstDanger.wait()
+            neo.fill(oneNhalfOrng)
+            neo.write()
+            event.CompleteEvent(event.FirstDanger)
+        elif (stat_nm is "FourthDanger"): # If Last Danger class go red
+            await event.FirstDanger.wait()
+            neo.fill(red)
+            neo.write()
+            event.CompleteEvent(event.FirstDanger)
         else:
             pass
         await uasyncio.sleep_ms(200) # Check every 0.2 sec

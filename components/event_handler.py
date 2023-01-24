@@ -7,6 +7,10 @@ Think = Event() # If doing something too long
 PowerOn = Event() # On power on
 Request = Event() # On voice assistant help request
 Alarm = Event() # RTC alarm
+FirstDanger = Event() # On first danger class
+SecondDanger = Event() # On second danger class
+ThirdDanger = Event() # On third danger class
+FourthDanger = Event() # On last danger class
 
 # Status event only for WaitAny()
 Status = Event()
@@ -40,6 +44,18 @@ async def WaitAny():
         elif Request.is_set():
             Status.set()
             return "Request"
+        elif FirstDanger.is_set():
+            Status.set()
+            return "FirstDanger"
+        elif SecondDanger.is_set():
+            Status.set()
+            return "SecondDanger"
+        elif ThirdDanger.is_set():
+            Status.set()
+            return "ThirdDanger"
+        elif FourthDanger.is_set():
+            Status.set()
+            return "FourthDanger"
         else:
             pass
     else:

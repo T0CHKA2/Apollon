@@ -67,6 +67,9 @@ ___
 
 Для сборки необходимо: </br>
 [ESP32]() </br>
+[DHT22]() </br>
+[RTC DS1307]() </br>
+[Две кнопки]() </br>
 [Светодиоды](https://amperkot.ru/products/svetodiodnoe_koltso_cjmcu_16_ws2812_5050_rgb_led/24260776.html) </br>
 [SD модуль]() </br>
 [Динамик (хотя бы два)]() </br>
