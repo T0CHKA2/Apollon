@@ -17,6 +17,6 @@ class machine.SDCard(
 sd = sdcard.SDCard(machine.SPI(1), machine.Pin(34)) 
 vfs = os.VfsFat(sd)
 
-os.mount(vfs, “/fc”)
-print(“Filesystem check”)
-print(os.listdir(“/fc”))
+os.mount(vfs, "/fc")
+print("Filesystem check")
+print(os.listdir("/fc"))
