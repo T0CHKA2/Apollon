@@ -57,7 +57,8 @@ async def WaitAny():
             Status.set()
             return "FourthDanger"
         else:
-            pass
+            Warning("Unknown event, please check if you added it in WaitAny()")
+            pass # If unknown event throw warn and pass
     else:
         raise Exception("Unknown status of 'Status' event") # throw err if status of "Status" event is unknown
 

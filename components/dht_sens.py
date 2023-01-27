@@ -11,6 +11,8 @@ async def measure(pin, delay):
         hum = sensor.humidity()
         if temp > 20 or temp < 0: # If temp too hot, will warn to drink more water
             event.FirstDanger.set() # If too cold, will warn to suit up warm
-        else: # In normal temperature will continiue work stabile
+        elif hum < 20: # If hum too low, will warn to drink more water
+            event.FirstDanger.set()
+        else: # In normal temperature and hum will continiue work stabile
             event.Idle.set()
         await uasyncio.sleep(delay)
