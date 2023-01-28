@@ -6,7 +6,7 @@ import event_handler as event
 async def measure(pin, delay):
     sensor = dht.DHT22(Pin(pin))
     while True:
-        sensor.measure() # Measure because in without it hum and temp = 0
+        sensor.measure() # Measure because without it hum and temp is 0
         temp = sensor.temperature()
         hum = sensor.humidity()
         if temp > 20 or temp < 0: # If temp too hot, will warn to drink more water
