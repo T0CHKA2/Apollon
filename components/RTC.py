@@ -1,4 +1,4 @@
-import SDL_DS1307, machine, uasyncio
+import ds1307, machine, uasyncio
 import event_handler as event
 
 ds1307 = SDL_DS1307.SDL_DS1307(1, 0x68)

@@ -1,6 +1,6 @@
 from components.buttons import longpress
 from components.dht_sens import measure
-from components.event_handler import WaitAny, CompleteEvent
+from components.event_handler import WaitAny, CompleteEvent, HazardDown, HazardUp
 from components.RTC import alarm, alarm_set
 
 # This file will create module

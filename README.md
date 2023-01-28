@@ -22,6 +22,19 @@ The demo version can be viewed [here](https://wokwi.com/projects/354477939926235
 ![Demo Version](https://i.ibb.co/WPyDdTW/442.png)
 ___
 ## Сapability
+
+Accordingly, during that time of work, I specifically saw what could be added to this assistant, and at least if you are a multi-machine employee, that is, you work on several machines at the same time, I think you will definitely be helped by ***Alarm clock*** which will be at least 5, so that you can set an alarm clock  on all the machines are working.
+
+You are measuring a part, and your technological map is located at the other end of the site and you are too lazy to follow it? The same ***quick recording*** will help you with this. Just say "Apollo Recording" and say what you will need. For example, "Apollo Records the linear size of the tail seventy-five millimeters plus minus one tenth" and at the right moment you can ask him what the linear size of the tail is. Or what you wrote down
+
+There are also thoughts to apply a 4-point hazard system that will work from various sensors. For example, you entered an area where there is a lot of air pollution and it is better for you to use a respirator to comply with Safety Regulations? Get a warning from Apollo that will set 1 danger point and notify you of contamination and remind you of the respirator. Have you entered an area where the air temperature is very high? Get another 1 hazard score and notification of dehydration in hot conditions and the possibility of getting burned or sunstroke in summer. Depending on how many danger points there will be, the color on the case will change from Yellow (Minor danger) to Red (Significant danger).
+
+You were given a new drawing, you put the first blank and received from it the first part that you need to measure, and after measuring you found that this is a fixable defect, but how do you calculate how much you need to rotate the part? Or do you put a new rig on the machine, but you don't know how much you need to turn it? *** An advanced calculator*** that works, not surprisingly, by voice will help you. Just tell the necessary information to Apollo and you will get the result. Example: "Apollo tangent of angle 320" to which he will give you an answer.
+
+The last employee was fired, and there is no space on your device? It doesn't matter, the case has a window for SD cards to increase the amount of memory, which is mainly used for this.
+
+PS You can always ask Apollo about some information, for example, if you set the alarm after 40 minutes, you can ask how much is left until the end of the alarm.
+
 ___
 ## Components
 
@@ -34,6 +47,9 @@ For assembling requiring: </br>
 [SD module]() </br>
 [Speakers (2 at least)]() </br>
 [Microphone]()  </br>
+
+And 3D Printer, [link to the data for printer are here]()
+
 ___
 ## Assembling
 

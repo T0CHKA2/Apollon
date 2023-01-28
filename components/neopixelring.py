@@ -17,10 +17,18 @@ def fadeoff(neopixel_pin):
     n = neopixel.NeoPixel(p, 16)
 
     for i in range (16):        
-        c = (0, 0, 0)
-        n.fill(c)
-        n.write()
-        sleep(0.1)
+        if i is 0:
+            sleep(0.1)
+            pass
+        elif i is 16:
+            n.fill(black)
+            n.write()
+            sleep(0.1)
+        else:
+            c = (i/255, i/184, i/65)
+            n.fill(c)
+            n.write()
+            sleep(0.1)
 
 
 # Coroutine: On LED Event change LED color
@@ -37,9 +45,9 @@ async def LED_st(pin):
             await event.Think.wait()
 
             for j in range(16):
-                np[j] = (0, 0, 0)
-                np[i % 16] = (blue)
-                np.write()
+                neo[j] = (0, 0, 0)
+                neo[i % 16] = (blue)
+                neo.write()
                 time.sleep_ms(50)
             
             event.CompleteEvent(event.Think) # Set event close because completed

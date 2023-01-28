@@ -60,7 +60,32 @@ async def WaitAny():
             Warning("Unknown event, please check if you added it in WaitAny()")
             pass # If unknown event throw warn and pass
     else:
-        raise Exception("Unknown status of 'Status' event") # throw err if status of "Status" event is unknown
+        raise Exception("Unknown status of 'Status' event")
+        # throw err if status of "Status" event is unknown
+
+# Very stupid code from me here again
+# Function: Will raise danger level
+def HazardUp():
+    if FirstDanger.is_set():
+        if SecondDanger.is_set():
+            if ThirdDanger.is_set():
+                if FourthDanger.is_set():
+                    pass
+                else:
+                    FourthDanger.set()
+            else:
+                ThirdDanger.set()
+        else:
+            SecondDanger.set()
+    else:
+        FirstDanger.set()
+
+# Function: Will lower danger level
+def HazardDown():
+    # Here will be multiple events that will work as trigger
+    # That will trigger event_handler and do LED change
+    
+    pass
 
 # Function: Will close all events that using LEDs
 def CompleteEvent(event):
@@ -70,3 +95,11 @@ def CompleteEvent(event):
     except Exception:
         print(Exception) # Error handling
     
+
+# TODO: Event dic for easy to read WaitAny func
+# Example:
+#   event_dic = (Event1, Event2 ... EventN)
+#   for i in range event_dic.length
+#       if event_dic[i].is_set()
+#           event_dic[i].set()
+#           return event_dic[i].string-name
