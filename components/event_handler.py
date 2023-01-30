@@ -12,73 +12,79 @@ SecondDanger = Event() # On second danger class
 ThirdDanger = Event() # On third danger class
 FourthDanger = Event() # On last danger class
 
-# Status event only for WaitAny()
-Status = Event()
+# Lists for check
+event_list = [Idle, Error, Think, PowerOn, Alarm, Request, FirstDanger, SecondDanger, ThirdDanger, FourthDanger]
+DangerList = [FirstDanger, SecondDanger, ThirdDanger, FourthDanger]
+danger_level = 0
 
-# This is very bad move, i know...
-# But uasyncio.primitives.WaitAny() doesn't work
-# So i'm improvize
-
-# Coroutine: Detect any event and start LEDs color change event
-async def WaitAny():
-    # No loop here because of neopixelring.py loop check
-    if Status.is_set():
-        # This will remove err with overwrite event
-        pass
-    elif Status.is_set() is False:
-        if Idle.is_set():
-            Status.set()
-            return "Idle"
-        elif Error.is_set():
-            Status.set()
-            return "Error"
-        elif Think.is_set():
-            Status.set()
-            return "Think"
-        elif PowerOn.is_set():
-            Status.set()
-            return "PowerOn"
-        elif Alarm.is_set():
-            Status.set()
-            return "Alarm"
-        elif Request.is_set():
-            Status.set()
-            return "Request"
-        elif FirstDanger.is_set():
-            Status.set()
-            return "FirstDanger"
-        elif SecondDanger.is_set():
-            Status.set()
-            return "SecondDanger"
-        elif ThirdDanger.is_set():
-            Status.set()
-            return "ThirdDanger"
-        elif FourthDanger.is_set():
-            Status.set()
-            return "FourthDanger"
+# Function: Detect any event and start LEDs color change event
+def WaitAny():
+    for i in range(len(event_list)): # Check all events are they set or not
+        if event_list[i].is_set(): # If set, go return what event is set
+            return event_list[i]
         else:
-            Warning("Unknown event, please check if you added it in WaitAny()")
-            pass # If unknown event throw warn and pass
-    else:
-        raise Exception("Unknown status of 'Status' event")
-        # throw err if status of "Status" event is unknown
+            pass
 
-# Very stupid code from me here again
 # Function: Will raise danger level
-def HazardUp():
-    if FirstDanger.is_set():
-        if SecondDanger.is_set():
-            if ThirdDanger.is_set():
-                if FourthDanger.is_set():
-                    pass
-                else:
-                    FourthDanger.set()
-            else:
-                ThirdDanger.set()
-        else:
-            SecondDanger.set()
-    else:
+def HazardUp(score):
+    danger_level + score # Add score to danger level
+    if danger_level is 1:
+        SecondDanger.clear() # Clearing other danger classes
+        ThirdDanger.clear()
+        FourthDanger.clear()
+
         FirstDanger.set()
+    elif danger_level is 2:
+        FirstDanger.clear() # Clearing other danger classes
+        ThirdDanger.clear()
+        FourthDanger.clear()
+
+        SecondDanger.set()
+    elif danger_level is 3:
+        SecondDanger.clear() # Clearing other danger classes
+        FirstDanger.clear()
+        FourthDanger.clear()
+
+        ThirdDanger.set()
+    elif danger_level is 4:
+        SecondDanger.clear() # Clearing other danger classes
+        FirstDanger.clear()
+        ThirdDanger.clear()
+
+        FourthDanger.set()
+    else:
+        danger_level - score # Do not add score to danger level
+        Warning("There are limit for danger level, its already 4")
+
+        # TODO: Use "for i in range()"
+
+
+# Function: If no danger go idle state
+# This is TEST FUNC it may be not used in future commits
+def IdleState():
+    for i in range(len(DangerList)):
+        if DangerList[i].is_set():
+            pass
+        else:
+            Idle.set()
+
+# idk what is that so just let it be constructor
+# Class: Forming an a event cause and type to send it into this file
+class event(object):
+    def __init__(self, type, cause, score):
+        self.type = type # Example: Danger
+        self.score = score # Example: 1 TODO: Default: 0
+        self.cause = cause # Example: Temperature_over_limit
+
+def check(class_event): # Check are this danger(or hazard) type event
+        if class_event.type.lower() is "danger" or "hazard":
+            HazardUp(class_event.score) # If true, raise danger score and change LED color
+        else: # If not danger, just set event type
+            class_event.type.capitilize().set()
+
+
+# TODO: create new WaitAny() check, or think more about how to reconstruct WaitAny()
+# lmao this will be 3-rd reconstruction of WaitAny()
 
 # Function: Will lower danger level
 def HazardDown():
@@ -86,20 +92,3 @@ def HazardDown():
     # That will trigger event_handler and do LED change
     
     pass
-
-# Function: Will close all events that using LEDs
-def CompleteEvent(event):
-    try:
-        Status.clear()
-        event.clear() # Close all events
-    except Exception:
-        print(Exception) # Error handling
-    
-
-# TODO: Event dic for easy to read WaitAny func
-# Example:
-#   event_dic = (Event1, Event2 ... EventN)
-#   for i in range event_dic.length
-#       if event_dic[i].is_set()
-#           event_dic[i].set()
-#           return event_dic[i].string-name

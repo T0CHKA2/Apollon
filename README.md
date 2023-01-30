@@ -1,5 +1,6 @@
 - [En README](#Eng) </br>
 - [Ru README](#Ru) </br>
+- [Changelog](#changelog) </br>
 
 # Eng
 ___
@@ -115,9 +116,9 @@ ___
 ## Компоненты
 
 Для сборки необходимо: </br>
-[ESP32]() </br>
-[DHT22]() </br>
-[RTC DS1307]() </br>
+[ESP32](https://www.ozon.ru/product/modul-esp32-devkit-v1-wroom-32-bluetooth-i-wi-fi-380180322/?asb=rOfyN3pWgTReXEpKFnMtyGkLqxxX8g9OuVy82rRl4oA%253D&asb2=UO7eahulf8SJAf1mRKEHXEazoJlrXSzJJ8S3dO21ZPI2HYp2m2fx5SG5XBgBiuvs&avtc=1&avte=2&avts=1674982710&keywords=ESP32&sh=jiTmkT38Ng) </br>
+[DHT22](https://www.ozon.ru/product/datchik-temperatury-i-vlazhnosti-tsifrovoy-dht22-am2302-336621891/?asb=bXy5ib%252FbzQIpiKID9KgLxW38pNFD61PmuLLmlS01S18%253D&asb2=_q_ao_cZ_nQiLhORWsSoIyMu7iNJjnmxVbM78L9Rdbbd865N-1UhdKBcUegMiBpk&avtc=1&avte=2&avts=1674982742&keywords=DHT22&sh=jiTmkc8ztQ) </br>
+[RTC DS1307](https://www.ozon.ru/product/rtc-modul-chasov-realnogo-vremeni-ds1307-614402200/?advert=zXt_JcSb_x2cqNiTEdigoDI1TSpSnantFgHHGmvnTTWSpa13X3y-5tJp4iWIepgxAwDgsUOmlAdXqNuiWmsaowsDG6OoxtQFVrWkkU_-9rVGCLFvZWEI9hs70nHCaz9lDcFDOnMMjipiSwplCOhKLDZVZLbgbMFcF36e2tgwdCWjl84PzTBWvtRlsQhyU7XzJ4iB3sGI2jcdO4pi2wDmNeKbVzxXqIbL6ZlzpjGb3lTJmtQlX-3OLw29pw6w5gGmp17hpOmFMrQbi4MqsewMvFV5g1TVavisavRMQafDNUoKiITbQi3GP1tU-R9tbEjhRaEk2b_uT6XBhyrwOdMGDlsZzCPvN663VKB2uh_hBrjhr1r-3HmwDyuvLy7DqZBdXS4Z8xK1QZDqeq5TK72hOdO55LrO25-5IlZFnM2ScHH87xuNVKcOqUfO8P9XQXuZQuB8Co3MCOt3MFy9YddftC_1gvz7hRvKR4eHgbl2AyKSDk_iK5gikzEd8YocepvZOKAOkPSu5Ny9ItUB18bFdZNUrKzbNWXvtbrHEfhRfJp8mqc5olpo00Vh9gnUZnqh1VDJZvstvPnF_fHbEYFb7S51fJl-EWF6eF57itE0XMuPvc87uLy7JpQ1eI9Bn4L3w_WZ-NNZU2GruNHKBgyvoPycwKvao6iHWNvjvrX0IgyG2Paw1o5a5iraiXqvmnsKpUN-mGOSDZpe_36n5d1e22lK6b0y5g2Lf0BSkqRgoFkPlJJhBK2JcWtwsWjkriJECyuWwWxjUmAyVtucIJxdLllNVtnFB_84alwvCDpUb6pL0TijJeqzLQy8IyMBrjiOg_rblm-U18Zp1xQSwbegsw&avtc=1&avte=2&avts=1674982785&keywords=RTC+ds1307&sh=jiTmkV0TnA) </br>
 [Две кнопки]() </br>
 [Светодиоды](https://amperkot.ru/products/svetodiodnoe_koltso_cjmcu_16_ws2812_5050_rgb_led/24260776.html) </br>
 [SD модуль]() </br>
@@ -140,7 +141,15 @@ ___
 ___
 ## Дальнейшая поддержка проекта
 
-Пока неизвестно
+Скорее всего будет. Но пока проект не завершён ответа точного сказать не могу.
 
-
+# Changelog
+ - [[30.01.2023] Events rework, Unit-tests LED and README.md update]()
+ - [[28.01.2023] GitHub page upgrade, bug fixes, Eng translation for README.md, Events update](https://github.com/T0CHKA2/Apollon/commit/718430fa31d6bd200d37f67e45772c25dcb3a3dc)
+ - [[28.01.2023] Unit-Tests, Cosplay branch, code improvement](https://github.com/T0CHKA2/Apollon/commit/5ad87c2af36c2dac0817a0e9ba654eaed916c6f6)
+ - [[27.01.2023] GitHub page upgrade](https://github.com/T0CHKA2/Apollon/commit/5f53b319a82b1f54227076f0d856d56985d973d4)
+ - [[24.01.2023] Code upgrade, RTC and Alarms](https://github.com/T0CHKA2/Apollon/commit/14e936d86b7f239b0a8549241f0af31b5aa5e60a)
+ - [[23.01.2023] Event Handling](https://github.com/T0CHKA2/Apollon/commit/73517a1ccc67d092cbfc4f26255338cef65d6742)
+ - [[21.01.2023] DHT22 and Async](https://github.com/T0CHKA2/Apollon/commit/b9ebb92e417f117cd9647a0a16df47002a8c48b6)
+ - [[21.01.2023] NeoPixel LED Ring module support](https://github.com/T0CHKA2/Apollon/commit/e8ef0dabc6a360f021455f1c35787cc60a30ec99)
 ###### Work in progress...
