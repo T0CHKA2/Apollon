@@ -144,7 +144,8 @@ ___
 Скорее всего будет. Но пока проект не завершён ответа точного сказать не могу.
 
 # Changelog
- - [[30.01.2023] Events rework, Unit-tests LED and README.md update]()
+ - [[01.02.2023] Events update]()
+ - [[30.01.2023] Events rework, Unit-tests LED and README.md update](https://github.com/T0CHKA2/Apollon/commit/e3c72a21be7cfd7387e9e1370653f3b2235f0e6a)
  - [[28.01.2023] GitHub page upgrade, bug fixes, Eng translation for README.md, Events update](https://github.com/T0CHKA2/Apollon/commit/718430fa31d6bd200d37f67e45772c25dcb3a3dc)
  - [[28.01.2023] Unit-Tests, Cosplay branch, code improvement](https://github.com/T0CHKA2/Apollon/commit/5ad87c2af36c2dac0817a0e9ba654eaed916c6f6)
  - [[27.01.2023] GitHub page upgrade](https://github.com/T0CHKA2/Apollon/commit/5f53b319a82b1f54227076f0d856d56985d973d4)

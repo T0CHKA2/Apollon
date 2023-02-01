@@ -16,3 +16,5 @@ async def measure(pin, delay):
         else: # In normal temperature and hum will continiue work stabile
             event.Idle.set()
         await uasyncio.sleep(delay)
+
+        # TODO: Realize how to send data back to score down hazard level

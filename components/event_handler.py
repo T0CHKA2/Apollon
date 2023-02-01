@@ -11,9 +11,14 @@ FirstDanger = Event() # On first danger class
 SecondDanger = Event() # On second danger class
 ThirdDanger = Event() # On third danger class
 FourthDanger = Event() # On last danger class
+temp_over = Event()
+temp_lower = Event()
+hum_lower = Event()
 
 # Lists for check
 event_list = [Idle, Error, Think, PowerOn, Alarm, Request, FirstDanger, SecondDanger, ThirdDanger, FourthDanger]
+CauseList = [temp_lower, temp_over, hum_lower]
+# simple_ev_list = [Idle, Error, Think, PowerOn, Alarm, Request]
 DangerList = [FirstDanger, SecondDanger, ThirdDanger, FourthDanger]
 danger_level = 0
 
@@ -25,70 +30,58 @@ def WaitAny():
         else:
             pass
 
-# Function: Will raise danger level
-def HazardUp(score):
-    danger_level + score # Add score to danger level
-    if danger_level is 1:
-        SecondDanger.clear() # Clearing other danger classes
-        ThirdDanger.clear()
-        FourthDanger.clear()
-
-        FirstDanger.set()
-    elif danger_level is 2:
-        FirstDanger.clear() # Clearing other danger classes
-        ThirdDanger.clear()
-        FourthDanger.clear()
-
-        SecondDanger.set()
-    elif danger_level is 3:
-        SecondDanger.clear() # Clearing other danger classes
-        FirstDanger.clear()
-        FourthDanger.clear()
-
-        ThirdDanger.set()
-    elif danger_level is 4:
-        SecondDanger.clear() # Clearing other danger classes
-        FirstDanger.clear()
-        ThirdDanger.clear()
-
-        FourthDanger.set()
-    else:
-        danger_level - score # Do not add score to danger level
-        Warning("There are limit for danger level, its already 4")
-
-        # TODO: Use "for i in range()"
-
-
-# Function: If no danger go idle state
-# This is TEST FUNC it may be not used in future commits
-def IdleState():
+# Function: Will update danger level
+def HazardUpdate(score):
+    danger_level + score
+    # This will limit danger_level only to 4 levels
+    # Because of Python interpretator 0 = 1, so 3 will be 4
+    if danger_level > 3:
+      danger_level = 3
+    elif danger_level < 0:
+        danger_level = 0
+            
     for i in range(len(DangerList)):
         if DangerList[i].is_set():
+           DangerList[i].clear() # Clear current danger level
+           DangerList[danger_level].set() # Set new by the danger_level score
+
+# Function: Check cause of danger and react to danger change
+def CauseCheck(type, score):
+    for i in range(len(CauseList)):
+        if CauseList[i].is_set() and CauseList[i] is type:
+            # If Cause is set and selected Cause from list is type
             pass
+        elif CauseList[i] is type:
+            type.set()
+            HazardUpdate(score)
         else:
-            Idle.set()
+            Warning("Unkown Cause type")
 
-# idk what is that so just let it be constructor
-# Class: Forming an a event cause and type to send it into this file
-class event(object):
-    def __init__(self, type, cause, score):
-        self.type = type # Example: Danger
-        self.score = score # Example: 1 TODO: Default: 0
-        self.cause = cause # Example: Temperature_over_limit
+# Function: Clear danger cause and lower danger level
+def CauseClear(type, score):
+    type.clear()
+    HazardUpdate(score)
 
-def check(class_event): # Check are this danger(or hazard) type event
-        if class_event.type.lower() is "danger" or "hazard":
-            HazardUp(class_event.score) # If true, raise danger score and change LED color
-        else: # If not danger, just set event type
-            class_event.type.capitilize().set()
+# Function: Check are there any active danger events, are the event type is danger type and set event
+def UpdateStatus(name, cause, score):
+    for i in range(len(DangerList)): # Check, are there any danger events set
+        if DangerList[i].is_set() and score is 0:
+            # That will destroy loop of ++score every time
+            # And ignore all events that had 0 priority
+            pass
+        elif DangerList[i].is_set():
+            Warning("Danger event is set, unable to change status")
+            pass
+        else: 
+            if str(name.lower()) is "danger" or "hazard": # Check for danger or hazard type event
+                if (type(cause) is 'undefined' ):
+                    Warning("Cause type is undefined")
+                else:
+                    if score < 0:
+                        CauseClear(cause, score) 
+                    else: 
+                        CauseCheck(cause, score) # If true, raise danger score and change LED color
+            else: # If not danger, just set event type
+                name.capitilize().set()
 
-
-# TODO: create new WaitAny() check, or think more about how to reconstruct WaitAny()
-# lmao this will be 3-rd reconstruction of WaitAny()
-
-# Function: Will lower danger level
-def HazardDown():
-    # Here will be multiple events that will work as trigger
-    # That will trigger event_handler and do LED change
-    
-    pass
+# TODO: Test new event handler
