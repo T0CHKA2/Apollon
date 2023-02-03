@@ -18,70 +18,96 @@ hum_lower = Event()
 # Lists for check
 event_list = [Idle, Error, Think, PowerOn, Alarm, Request, FirstDanger, SecondDanger, ThirdDanger, FourthDanger]
 CauseList = [temp_lower, temp_over, hum_lower]
-# simple_ev_list = [Idle, Error, Think, PowerOn, Alarm, Request]
+simple_list = [Idle, Error, Think, PowerOn, Alarm, Request]
 DangerList = [FirstDanger, SecondDanger, ThirdDanger, FourthDanger]
-danger_level = 0
+DangerScore = -1
 
-# Function: Detect any event and start LEDs color change event
-def WaitAny():
+def Check(list, output):
+    for i in range(len(list)):
+        if list[i].is_set():
+            if output:
+                return list[i]
+            else:
+                return True
+        else:
+            return False
+
+def DangerClass(Score):
+    global DangerScore
+
+    UpdDangerScore = DangerScore + Score
+
+    if UpdDangerScore < -1:
+        UpdDangerScore = -1
+    elif UpdDangerScore > 3:
+        UpdDangerScore = 3
+    elif UpdDangerScore == -1:
+        for i in range(len(DangerList)):
+            DangerList[i].clear()
+        
+        EventSet(Idle)
+    else:
+        pass
+
+    if UpdDangerScore is -1:
+        for i in range(len(DangerList)):
+            DangerList[i].clear()
+            Idle.set()
+    elif UpdDangerScore is 0:
+        for i in range(len(DangerList)):
+            if DangerList[i].is_set():
+                DangerList[i].clear()
+                DangerList[UpdDangerScore].set()
+            else:
+                DangerList[UpdDangerScore].set()
+            
+    elif UpdDangerScore is 1:
+        for i in range(len(DangerList)):
+            DangerList[i].clear()
+            DangerList[UpdDangerScore].set()
+    elif UpdDangerScore is 2:
+        for i in range(len(DangerList)):
+            DangerList[i].clear()
+            DangerList[UpdDangerScore].set()
+    elif UpdDangerScore is 3:
+        for i in range(len(DangerList)):
+            DangerList[i].clear()
+            DangerList[UpdDangerScore].set()
+
+def CauseSet(Cause, Score):
+    CauseCheck = Check(CauseList, True)
+    for i in range(len(CauseList)):
+        if CauseList[i].is_set():
+            pass
+        else:
+            Cause.set()
+            DangerClass(Score)
+
+def CauseClear(Cause, Score):
+    if Cause.is_set():
+        Cause.clear()
+        DangerClass(Score)
+    else:
+        pass
+
+def LoopCheck():
     for i in range(len(event_list)): # Check all events are they set or not
         if event_list[i].is_set(): # If set, go return what event is set
             return event_list[i]
         else:
             pass
 
-# Function: Will update danger level
-def HazardUpdate(score):
-    danger_level + score
-    # This will limit danger_level only to 4 levels
-    # Because of Python interpretator 0 = 1, so 3 will be 4
-    if danger_level > 3:
-      danger_level = 3
-    elif danger_level < 0:
-        danger_level = 0
-            
-    for i in range(len(DangerList)):
-        if DangerList[i].is_set():
-           DangerList[i].clear() # Clear current danger level
-           DangerList[danger_level].set() # Set new by the danger_level score
 
-# Function: Check cause of danger and react to danger change
-def CauseCheck(type, score):
-    for i in range(len(CauseList)):
-        if CauseList[i].is_set() and CauseList[i] is type:
-            # If Cause is set and selected Cause from list is type
-            pass
-        elif CauseList[i] is type:
-            type.set()
-            HazardUpdate(score)
-        else:
-            Warning("Unkown Cause type")
+def EventSet(Event):
+    DangerCheck = Check(DangerList, False)
+    if DangerCheck:
+        pass
+    else:
+        Event.set()
 
-# Function: Clear danger cause and lower danger level
-def CauseClear(type, score):
-    type.clear()
-    HazardUpdate(score)
 
-# Function: Check are there any active danger events, are the event type is danger type and set event
-def UpdateStatus(name, cause, score):
-    for i in range(len(DangerList)): # Check, are there any danger events set
-        if DangerList[i].is_set() and score is 0:
-            # That will destroy loop of ++score every time
-            # And ignore all events that had 0 priority
-            pass
-        elif DangerList[i].is_set():
-            Warning("Danger event is set, unable to change status")
-            pass
-        else: 
-            if str(name.lower()) is "danger" or "hazard": # Check for danger or hazard type event
-                if (type(cause) is 'undefined' ):
-                    Warning("Cause type is undefined")
-                else:
-                    if score < 0:
-                        CauseClear(cause, score) 
-                    else: 
-                        CauseCheck(cause, score) # If true, raise danger score and change LED color
-            else: # If not danger, just set event type
-                name.capitilize().set()
-
-# TODO: Test new event handler
+# TODO: Configure LED work
+# Now it's all working
+# But somehow there is delay
+# and i dunno how this delay work
+# i think i starting to lose motivation to this work
