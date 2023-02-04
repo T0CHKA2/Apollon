@@ -1,0 +1,8 @@
+uasyncio
+machine
+esp32
+time
+dht
+neopixel
+unittest
+ds1307
