@@ -144,6 +144,7 @@ ___
 Скорее всего будет. Но пока проект не завершён ответа точного сказать не могу.
 
 # Changelog
+ - [[04.02.2023] all: GitHub page update, code commentary, main merge]()
  - [[04.02.2023] Advanced Events update, 4-point danger status]()
  - [[01.02.2023] Events update]()
  - [[30.01.2023] Events rework, Unit-tests LED and README.md update](https://github.com/T0CHKA2/Apollon/commit/e3c72a21be7cfd7387e9e1370653f3b2235f0e6a)

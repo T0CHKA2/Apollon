@@ -17,10 +17,8 @@ async def measure(pin, delay):
             event.CauseSet(event.temp_lower, 1)
             if int(hum) < 20:
                 event.CauseSet(event.hum_lower, 2)
-        else: # In normal temperature and hum will continiue work stabile
+        else:
             event.CauseClear(event.temp_over, -1)
             event.CauseClear(event.temp_lower, -1)
             event.CauseClear(event.hum_lower, -1)
         await uasyncio.sleep(delay)
-
-# Realize how to check cause that was declared

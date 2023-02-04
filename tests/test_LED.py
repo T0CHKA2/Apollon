@@ -1,17 +1,16 @@
-import unittest, neopixel
+import unittest, neopixel, uasyncio
 from components import neopixelring as LED
 from components import event_handler as event
 
+# Will be reworked in future, when i will have ESP32
 
 class TestPowerOn(unittest.TestCase):
-
     def setUp(self) -> None:
-        uasyncio.create_task(neopixelring.LED_st(27))
+        uasyncio.create_task(LED.LED_st(27))
         return super().setUp()
 
     def test_poweron(self):
-        event.PowerOn.set() # Set event flag
-        LED.LED_st(27) # Start LED
+        event.PowerOn.set()
         pixelRGB = neopixel.__getitem__(1) # Getting RGB number of pixel
         self.assertEqual(pixelRGB, (255, 184, 65))
         event.PowerOn.clear()
