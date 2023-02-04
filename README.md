@@ -45,6 +45,8 @@ For assembling requiring: </br>
 [DHT22]() </br>
 [Two buttons]() </br>
 [Neopixel Ring LEDs]() </br>
+[ESP32]() </br>
+[LEDs]() </br>
 [SD module]() </br>
 [Speakers (2 at least)]() </br>
 [Microphone]()  </br>
@@ -63,10 +65,7 @@ ___
 ## Further project support
 
 Still unknown
-
 ___
-</br>
-
 # Ru
 ___
 <h1 align="center"> АПОллон - Помощник операторов станков с ПУ </h1> </br>
