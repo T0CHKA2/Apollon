@@ -36,35 +36,37 @@ async def LED_st(pin):
     while True:
         neo = neopixel.NeoPixel(Pin(pin), 16)
         stat_nm = event.LoopCheck() # check if true
-        if (stat_nm is event.Idle): # If Idle LED go orange
+        print(stat_nm)
+        if (stat_nm is "Idle"): # If Idle LED go orange
             neo.fill(orange)
             neo.write()
-        elif (stat_nm is event.Think): # If Think LED go blue cycle
+        elif (stat_nm is "Think"): # If Think LED go blue cycle
 
             for j in range(16):
+                np[j] = (0, 0, 0)
+                np[i % 16] = (blue)
+                np.write()
                 neo[j] = (0, 0, 0)
                 neo[i % 16] = (blue)
                 neo.write()
                 time.sleep_ms(50)
-            
-            event.Think.clear() # Set event close because completed
-        elif (stat_nm is event.PowerOn): # If power on LED go fade from off to orange
+
+        elif (stat_nm is "PowerOn"): # If power on LED go fade from off to orange
 
             for i in range(16):
                 c = (i * 15, i * 11, i * 4)
                 neo.fill(c)
                 neo.write()
                 sleep(0.1)
-            
-            event.PowerOn.clear() # Set event close because completed
-        elif (stat_nm is event.Error): # If Error LED go red
+            event.PowerOn.clear() # Because it used once, clear
+            event.Idle.set()
+        elif (stat_nm is "Error"): # If Error LED go red
             neo.fill(red)
             neo.write()
-            event.Error.clear() # Set event close beacuse completed
-        elif (stat_nm is event.Request): # If help request LED go blue
+        elif (stat_nm is "Request"): # If help request LED go blue
             neo.fill(blue)
             neo.write
-        elif (stat_nm is event.Alarm): # If Alarm Clock working LED go strobo
+        elif (stat_nm is "Alarm"): # If Alarm Clock working LED go strobo
             
             for i in range(10):
                 neo.fill(black)
@@ -74,21 +76,16 @@ async def LED_st(pin):
                 neo.write()
                 sleep(0.5)
             
-
-        elif (stat_nm is event.FirstDanger): # If First Danger class go yellow
-            print("FirstDanger")
+        elif (stat_nm is "FirstDanger"): # If First Danger class go yellow
             neo.fill(yellow)
             neo.write()
-        elif (stat_nm is event.SecondDanger): # If Second Danger class go half orange
-            print("SecondDanger")
+        elif (stat_nm is "SecondDanger"): # If Second Danger class go half orange
             neo.fill(half_orng)
             neo.write()
-        elif (stat_nm is event.ThirdDanger): # If Third Danger class go one and half orange
-            print("ThirdDanger")
+        elif (stat_nm is "ThirdDanger"): # If Third Danger class go one and half orange
             neo.fill(oneNhalfOrng)
             neo.write()
-        elif (stat_nm is event.FourthDanger): # If Last Danger class go red
-            print("FourthDanger")
+        elif (stat_nm is "FourthDanger"): # If Last Danger class go red
             neo.fill(red)
             neo.write()
         else:
