@@ -26,153 +26,108 @@ event_list = [Idle, Error, Think, PowerOn, Alarm, Request, FirstDanger, SecondDa
 CauseList = [temp_lower, temp_over, hum_lower]
 simple_list = [Idle, Error, Think, PowerOn, Alarm, Request]
 DangerList = [FirstDanger, SecondDanger, ThirdDanger, FourthDanger]
-DangerScore = -1 # Default -1, -1 == Idle state, No danger, will be reworked
 
 
-
-def Check(list: type[list], output: type[bool]):
+def StatusCheck():
     """
-    Check selected list for active events, output for return type.
-    Example:
-
-    >>> Check(CauseList, True)
-    temp_over
-
-    OR
-
-    >>> Check(CauseList, False)
-    True
+    Wait any event flag to change LED color.
     """
     
-    for i in range(len(list)):
-        if list[i].is_set():
-            if output:
-                return list[i]
-            else:
-                return True
+    for i in range(len(event_list)):
+        if event_list[i].is_set():
+            return event_list[i]
         else:
-            return False
+            pass
 
+def DFileInit():
+    """
+    Initializing danger score file.
+    """
+
+    with open("temp.txt", "w") as f:
+        f.write("-1")
+        f.close()
 
 def DangerClass(Score: type[int]):
     """
     This function interacting with 4PDL (4-Point Danger Level) by raising or lower Danger Score.
     """
 
-    global DangerScore # Using default
+    with open("temp.txt", "r") as f:
 
-    # This part will be reworked
-    UpdDangerScore = DangerScore + Score
-    # Limit set
-    if UpdDangerScore < -1:
-        UpdDangerScore = -1
-    elif UpdDangerScore > 3:
-        UpdDangerScore = 3
-    elif UpdDangerScore == -1:
-        for i in range(len(DangerList)):
-            DangerList[i].clear()
-    else:
-        pass
+        DangerScore = f.read()
+        NewDScore = int(DangerScore) + int(Score)
 
-    with open("temp.txt", "w") as f:
-        f.write("%s" % (UpdDangerScore))
-    # This part will be reworked
+        # Limit set
+        if NewDScore < -1:
+            NewDScore = -1
 
-    with open("temp.txt", "r") as d:
-        d = open("temp.txt", "r")
-        DataScore = d.read()
+        elif NewDScore > 3:
+            NewDScore = 3
+        
+        with open("temp.txt", "w") as d:
+            d.write("%s" % (NewDScore))
 
         try:
-            if DataScore is "-1":
+            if NewDScore is -1:
                 for i in range(len(DangerList)):
                     DangerList[i].clear()
                     Idle.set()
-            elif DataScore is "0":
-                print("0")
+
+            elif NewDScore is 0:
                 for i in range(len(DangerList)):
                     DangerList[i].clear()
+                    Idle.clear()
                     FirstDanger.set()
-            elif DataScore is "1":
-                print("1")
+
+            elif NewDScore is 1:
                 for i in range(len(DangerList)):
                     DangerList[i].clear()
+                    Idle.clear()
                     SecondDanger.set()
-            elif DataScore is "2":
-                print("2")
+
+            elif NewDScore is 2:
                 for i in range(len(DangerList)):
                     DangerList[i].clear()
+                    Idle.clear()
                     ThirdDanger.set()
-            elif DataScore is "3":
-                print("3")
+
+            elif NewDScore is 3:
                 for i in range(len(DangerList)):
                     DangerList[i].clear()
+                    Idle.clear()
                     FourthDanger.set()
         finally:
-            d.close()
-    
+            f.close()
 
-# Function: Set cause type and raise danger level
 def CauseSet(Cause: type[Event], Score: type[int]):
     """
     Set cause type and raise danger level by score number.
     Example: `CauseSet(hum_lower, 1)`
     """
 
-    CauseCheck = Check(CauseList, True)
-    for i in range(len(CauseList)):
-        if CauseList[i].is_set():
-            pass
-        else:
-            Cause.set()
-            DangerClass(Score)
+    if Cause.is_set():
+        pass
+
+    else:
+        Cause.set()
+        DangerClass(Score)
 
 # Function: Clear cause type and lower danger level
 def CauseClear(Cause: type[Event], Score: type[int]):
     """
     Clear cause type and lower danger level by score.
-    Example: `CauseClear(hum_lower, 1)`
+    Example: `CauseClear(hum_lower, -1)`
     """
 
     if Cause.is_set():
         Cause.clear()
         DangerClass(Score)
+
     else:
         pass
 
 
-# P.S. Will be reworked
-def LoopCheck():
-    """
-    Check event for set, if set will return name of event.
-    It is usually used in the LED color adaptation system according to the situation.
-
-    Always need to be used in loop functions for proper usage
-    """
-
-    if FirstDanger.is_set():
-        return "FirstDanger"
-    elif SecondDanger.is_set():
-        return "SecondDanger"
-    elif ThirdDanger.is_set():
-        return "ThirdDanger"
-    elif FourthDanger.is_set():
-        return "FourthDanger"
-    elif Idle.is_set():
-        return "Idle"
-    elif Error.is_set():
-        return "Error"
-    elif Think.is_set():
-        return "Think"
-    elif PowerOn.is_set():
-        return "PowerOn"
-    elif Alarm.is_set():
-        return "Alarm"
-    elif Request.is_set():
-        return "Request"
-    else:
-        pass
-
-# Function: Set event if danger not set
 # P.S. Will be reworked in events.py
 def EventSet(Event: type[Event]):
     """
@@ -181,8 +136,9 @@ def EventSet(Event: type[Event]):
     If danger is set, will pass
     """
 
-    DangerCheck = Check(DangerList, False)
-    if DangerCheck:
-        pass
-    else:
-        Event.set()
+    for i in range(len(DangerList)):
+        if DangerList[i].is_set():
+            pass
+        
+        else:
+            Event.set()

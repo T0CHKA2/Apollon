@@ -1,6 +1,6 @@
 import neopixel, uasyncio, time
 from machine import Pin
-import event_handler as event
+import event_handler as events
 
 # Settings
 orange = (255, 184, 65)
@@ -8,8 +8,8 @@ red = (255, 0, 0)
 blue = (0, 0, 255)
 yellow = (255, 255, 0)
 black = (0, 0, 0)
-half_orng = (165, 255, 15)
-oneNhalfOrng = (255, 165, 15)
+half_orng = (165, 255, 15) # Of course it's not half orng
+oneNhalfOrng = (255, 165, 15) # And of course it's not 1.5 orng
 
 # Will be reworked
 """
@@ -36,53 +36,57 @@ def fadeoff(neopixel_pin):
 # Coroutine: On LED Event change LED color
 async def LED_start(pin: type[int]):
     while True:
+
         neo = neopixel.NeoPixel(Pin(pin), 16)
-        stat_name = event.LoopCheck() # Check for bool
-        if (stat_name is "FirstDanger"):
+        event = events.StatusCheck()
+
+        if (event is events.FirstDanger):
             neo.fill(yellow)
             neo.write()
-        elif (stat_name is "SecondDanger"):
+
+        elif (event is events.SecondDanger):
             neo.fill(half_orng)
             neo.write()
-        elif (stat_name is "ThirdDanger"):
+
+        elif (event is events.ThirdDanger):
             neo.fill(oneNhalfOrng)
             neo.write()
-        elif (stat_name is "FourthDanger"):
+
+        elif (event is events.FourthDanger):
             neo.fill(red)
             neo.write()
-        elif (stat_name is "Idle"):
+        elif (event is events.Idle):
             neo.fill(orange)
             neo.write()
-        elif (stat_name is "Think"):
 
-            for j in range(16):# Led color change cycle
-                neo[j] = (0, 0, 0)
-                neo[i % 16] = (blue)
-                neo.write()
-                neo[j] = (0, 0, 0)
-                neo[i % 16] = (blue)
-                neo.write()
-                time.sleep_ms(50)
+        elif (event is events.Think):
+            for i in range(4): # LED Color change cycle
+                for j in range(16): # Color change: cycle
+                    neo[j] = (0, 0, 0)
+                    neo[i % 16] = (blue)
+                    neo.write()
+                    time.sleep_ms(50)
 
-        elif (stat_name is "PowerOn"):
-
-            for i in range(16): # Same here
+        elif (event is events.PowerOn):
+            for i in range(16): # Color change: fade off/orange
                 c = (i * 15, i * 11, i * 4)
                 neo.fill(c)
                 neo.write()
                 time.sleep(0.1)
             
-            event.PowerOn.clear() # Because it used once, clear
-            event.Idle.set() # For stable event check is set
-        elif (stat_name is "Error"):
+            events.PowerOn.clear() # Because it used once, clear
+            events.EventSet(events.Idle) # For stable event check is set
+
+        elif (event is events.Error):
             neo.fill(red)
             neo.write()
-        elif (stat_name is "Request"):
+
+        elif (event is events.Request):
             neo.fill(blue)
             neo.write
-        elif (stat_name is "Alarm"):
-            
-            for i in range(10): # Same as Think event
+
+        elif (event is events.Alarm):
+            for i in range(10): # Color change: strobo
                 neo.fill(black)
                 neo.write()
                 time.sleep(0.5)
@@ -90,7 +94,7 @@ async def LED_start(pin: type[int]):
                 neo.write()
                 time.sleep(0.5)
 
-            event.Alarm.clear() # Clear after 10 sec
+            events.Alarm.clear() # Clear after 10 sec
         else:
             pass
         await uasyncio.sleep_ms(200) # Check every 0.2 sec
